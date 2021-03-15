@@ -740,7 +740,7 @@ U 1 1 5E6FA0F7
 P 8600 5850
 F 0 "J11" H 8680 5892 50  0000 L CNN
 F 1 "TopPlate" H 8680 5801 50  0000 L CNN
-F 2 "PurpleDrop:TopPlatePad" H 8600 5850 50  0001 C CNN
+F 2 "PurpleDrop:Header1_RA" H 8600 5850 50  0001 C CNN
 F 3 "~" H 8600 5850 50  0001 C CNN
 	1    8600 5850
 	1    0    0    -1  
@@ -751,7 +751,7 @@ U 1 1 5F5CB27D
 P 1350 6600
 F 0 "G1" H 1528 6671 50  0000 L CNN
 F 1 "AprilTag" H 1528 6580 50  0000 L CNN
-F 2 "PurpleDrop:tag36_11_00004_6.00mm" H 1350 6600 50  0001 C CNN
+F 2 "PurpleDrop:tag36_11_00007_6.00mm" H 1350 6600 50  0001 C CNN
 F 3 "" H 1350 6600 50  0001 C CNN
 	1    1350 6600
 	1    0    0    -1  
@@ -762,20 +762,9 @@ U 1 1 5F5CBA35
 P 2050 6600
 F 0 "G2" H 2228 6671 50  0000 L CNN
 F 1 "AprilTag" H 2228 6580 50  0000 L CNN
-F 2 "PurpleDrop:tag36_11_00005_6.00mm" H 2050 6600 50  0001 C CNN
+F 2 "PurpleDrop:tag36_11_00008_6.00mm" H 2050 6600 50  0001 C CNN
 F 3 "" H 2050 6600 50  0001 C CNN
 	1    2050 6600
-	1    0    0    -1  
-$EndComp
-$Comp
-L PurpleDrop:AprilTag G3
-U 1 1 5F5CC3E4
-P 2750 6600
-F 0 "G3" H 2928 6671 50  0000 L CNN
-F 1 "AprilTag" H 2928 6580 50  0000 L CNN
-F 2 "PurpleDrop:tag36_11_00006_6.00mm" H 2750 6600 50  0001 C CNN
-F 3 "" H 2750 6600 50  0001 C CNN
-	1    2750 6600
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -2345,10 +2334,10 @@ Wire Wire Line
 Text Label 5800 4800 0    50   ~ 0
 P88
 $Comp
-L Electrodes:DMFElectrode X?
+L Electrodes:DMFElectrode X4
 U 1 1 606AA665
 P 6300 4850
-F 0 "X?" H 6428 5096 50  0000 L CNN
+F 0 "X4" H 6428 5096 50  0000 L CNN
 F 1 "DMFElectrode" H 6428 5005 50  0001 L CNN
 F 2 "PurpleDrop:SimplePad" H 6300 4850 50  0001 C CNN
 F 3 "" H 6300 4850 50  0001 C CNN
@@ -2356,10 +2345,10 @@ F 3 "" H 6300 4850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Electrodes:DMFElectrode X?
+L Electrodes:DMFElectrode X3
 U 1 1 606AB2BC
 P 6300 4700
-F 0 "X?" H 6428 4946 50  0000 L CNN
+F 0 "X3" H 6428 4946 50  0000 L CNN
 F 1 "DMFElectrode" H 6428 4855 50  0001 L CNN
 F 2 "PurpleDrop:SimplePad" H 6300 4700 50  0001 C CNN
 F 3 "" H 6300 4700 50  0001 C CNN
@@ -2367,10 +2356,10 @@ F 3 "" H 6300 4700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Electrodes:DMFElectrode X?
+L Electrodes:DMFElectrode X2
 U 1 1 606ABDF5
 P 6300 4550
-F 0 "X?" H 6428 4796 50  0000 L CNN
+F 0 "X2" H 6428 4796 50  0000 L CNN
 F 1 "DMFElectrode" H 6428 4705 50  0001 L CNN
 F 2 "PurpleDrop:SimplePad" H 6300 4550 50  0001 C CNN
 F 3 "" H 6300 4550 50  0001 C CNN
@@ -2394,4 +2383,19 @@ Wire Wire Line
 Connection ~ 6150 4500
 Wire Wire Line
 	6150 4500 6150 4650
+$Comp
+L Electrodes:DMFElectrode X5
+U 1 1 60713C8C
+P 6350 5450
+F 0 "X5" H 6478 5696 50  0000 L CNN
+F 1 "DMFElectrode" H 6478 5605 50  0001 L CNN
+F 2 "PurpleDrop:SimplePad" H 6350 5450 50  0001 C CNN
+F 3 "" H 6350 5450 50  0001 C CNN
+	1    6350 5450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 5250 5900 5250
+Text Label 5900 5250 0    50   ~ 0
+P89
 $EndSCHEMATC
