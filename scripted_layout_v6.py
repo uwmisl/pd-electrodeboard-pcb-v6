@@ -5,19 +5,25 @@ import matplotlib.patches as patches
 import numpy as np
 import os
 
-from dmfwizard.types import BoardDesign, Grid
+from dmfwizard.types import BoardDesign, Grid, Peripheral
 from dmfwizard.io import load_peripheral
 from dmfwizard.construct import Constructor, reduce_board_to_electrodes, crenellate_grid, offset_polygon
 from dmfwizard.crenellation import crenellate_electrodes
 from dmfwizard.kicad import save_board
 
+# Define pitch of the electrode grids
 BASE_PITCH = 1.25
 SMALL_PITCH = 2 * BASE_PITCH
 LARGE_PITCH = 3 * BASE_PITCH
+# Define shape of the electrode crenellations
 MARGIN = 0.15
 NUM_DIGITS = 2
 THETA = 30
+# Copper-to-copper clearance and origin within the kicad PCB
+CLEARANCE = 0.11
+BOARD_ORIGIN = [162.5, 62.25]
 
+# Define position of the grids
 LARGE_GRID_WIDTH = 16
 LARGE_GRID_HEIGHT = 7
 LARGE_ORIGIN = (75.0/2 - LARGE_GRID_WIDTH*LARGE_PITCH/2, 4.5)
@@ -50,152 +56,151 @@ construct.fill_rect(large_grid, (3, 3), (2, 4))
 construct.fill_rect(large_grid, (7, 3), (2, 4))
 construct.fill_rect(large_grid, (11, 3), (2, 4))
 
-# Create interwoven fingers between neighboring electrodes
-crenellate_grid(large_grid, NUM_DIGITS, THETA, MARGIN*LARGE_PITCH)
-crenellate_grid(small_grid, NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
-
-# Manually crenellate the interfaces between large grid and small grid
-crenellate_electrodes(
-    large_grid.electrodes[(3, 6)],
-    small_grid.electrodes[(6, 0)],
-    NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
-crenellate_electrodes(
-    large_grid.electrodes[(7, 6)],
-    small_grid.electrodes[(12, 0)],
-    NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
-crenellate_electrodes(
-    large_grid.electrodes[(11, 6)],
-    small_grid.electrodes[(18, 0)],
-    NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
-
-
 # Create reservoirs
 small_reservoir_origin = np.add(SMALL_ORIGIN, (0.5 * SMALL_PITCH, 0.0))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/chevron1_reservoir.json'),
-    np.add(small_reservoir_origin, np.multiply((2, 3), SMALL_PITCH)),
+    np.add(small_reservoir_origin, np.multiply((2, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/chevron1_reservoir.json'),
-    np.add(small_reservoir_origin, np.multiply((7, 3), SMALL_PITCH)),
+    np.add(small_reservoir_origin, np.multiply((7, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/chevron1_reservoir.json'),
-    np.add(small_reservoir_origin, np.multiply((12, 3), SMALL_PITCH)),
+    np.add(small_reservoir_origin, np.multiply((12, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/chevron1_reservoir.json'),
-    np.add(small_reservoir_origin, np.multiply((17, 3), SMALL_PITCH)),
+    np.add(small_reservoir_origin, np.multiply((17, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/vortex1_reservoir.json'),
-    np.add(small_reservoir_origin, np.multiply((22, 3), SMALL_PITCH)),
+    np.add(small_reservoir_origin, np.multiply((22, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
-
-# Crenellate reservoir outputs
-crenellate_electrodes(
-    small_grid.electrodes[(2, 2)],
-    board.peripherals[0].electrode('A'),
-    NUM_DIGITS,
-    THETA,
-    MARGIN*SMALL_PITCH
-)
-crenellate_electrodes(
-    small_grid.electrodes[(7, 2)],
-    board.peripherals[1].electrode('A'),
-    NUM_DIGITS,
-    THETA,
-    MARGIN*SMALL_PITCH
-)
-crenellate_electrodes(
-    small_grid.electrodes[(12, 2)],
-    board.peripherals[2].electrode('A'),
-    NUM_DIGITS,
-    THETA,
-    MARGIN*SMALL_PITCH
-)
-crenellate_electrodes(
-    small_grid.electrodes[(17, 2)],
-    board.peripherals[3].electrode('A'),
-    NUM_DIGITS,
-    THETA,
-    MARGIN*SMALL_PITCH
-)
-crenellate_electrodes(
-    small_grid.electrodes[(22, 2)],
-    board.peripherals[4].electrode('A'),
-    NUM_DIGITS,
-    THETA,
-    MARGIN*SMALL_PITCH
-)
 
 # Create active input locations
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/dispense1.json'),
-    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((3, 1), LARGE_PITCH)),
+    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((3, 1), LARGE_PITCH)).tolist(),
     np.deg2rad(90))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/dispense1.json'),
-    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((3, 3), LARGE_PITCH)),
+    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((3, 3), LARGE_PITCH)).tolist(),
     np.deg2rad(90))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/dispense1.json'),
-    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((13, 1), LARGE_PITCH)),
+    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((13, 1), LARGE_PITCH)).tolist(),
     np.deg2rad(270))
 construct.add_peripheral(
     board,
     load_peripheral('peripherals/dispense1.json'),
-    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((13, 3), LARGE_PITCH)),
+    np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((13, 3), LARGE_PITCH)).tolist(),
     np.deg2rad(270))
+
+# Create copy of the board to crenellate. We will use the un-crenellated version for
+# generating the board definition file.
+crenellated_board = board.copy()
+
+# Create interwoven fingers between neighboring electrodes
+crenellate_grid(crenellated_board.grids[0], NUM_DIGITS, THETA, MARGIN*LARGE_PITCH)
+crenellate_grid(crenellated_board.grids[1], NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
+
+# Manually crenellate the interfaces between large grid and small grid
+crenellate_electrodes(
+    crenellated_board.grids[0].electrodes[(3, 6)],
+    crenellated_board.grids[1].electrodes[(6, 0)],
+    NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
+crenellate_electrodes(
+    crenellated_board.grids[0].electrodes[(7, 6)],
+    crenellated_board.grids[1].electrodes[(12, 0)],
+    NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
+crenellate_electrodes(
+    crenellated_board.grids[0].electrodes[(11, 6)],
+    crenellated_board.grids[1].electrodes[(18, 0)],
+    NUM_DIGITS, THETA, MARGIN*SMALL_PITCH)
+
+# Crenellate reservoir outputs
+crenellate_electrodes(
+    crenellated_board.grids[1].electrodes[(2, 2)],
+    crenellated_board.peripherals[0].electrode('A'),
+    NUM_DIGITS,
+    THETA,
+    MARGIN*SMALL_PITCH
+)
+crenellate_electrodes(
+    crenellated_board.grids[1].electrodes[(7, 2)],
+    crenellated_board.peripherals[1].electrode('A'),
+    NUM_DIGITS,
+    THETA,
+    MARGIN*SMALL_PITCH
+)
+crenellate_electrodes(
+    crenellated_board.grids[1].electrodes[(12, 2)],
+    crenellated_board.peripherals[2].electrode('A'),
+    NUM_DIGITS,
+    THETA,
+    MARGIN*SMALL_PITCH
+)
+crenellate_electrodes(
+    crenellated_board.grids[1].electrodes[(17, 2)],
+    crenellated_board.peripherals[3].electrode('A'),
+    NUM_DIGITS,
+    THETA,
+    MARGIN*SMALL_PITCH
+)
+crenellate_electrodes(
+    crenellated_board.grids[1].electrodes[(22, 2)],
+    crenellated_board.peripherals[4].electrode('A'),
+    NUM_DIGITS,
+    THETA,
+    MARGIN*SMALL_PITCH
+)
+
 # Crenellate active inputs
 crenellate_electrodes(
-    large_grid.electrodes[(3, 1)],
-    board.peripherals[5].electrode('A'),
+    crenellated_board.grids[0].electrodes[(3, 1)],
+    crenellated_board.peripherals[5].electrode('A'),
     NUM_DIGITS,
     THETA,
     MARGIN*SMALL_PITCH
 )
 crenellate_electrodes(
-    large_grid.electrodes[(3, 3)],
-    board.peripherals[6].electrode('A'),
+    crenellated_board.grids[0].electrodes[(3, 3)],
+    crenellated_board.peripherals[6].electrode('A'),
     NUM_DIGITS,
     THETA,
     MARGIN*SMALL_PITCH
 )
 crenellate_electrodes(
-    large_grid.electrodes[(12, 1)],
-    board.peripherals[7].electrode('A'),
+    crenellated_board.grids[0].electrodes[(12, 1)],
+    crenellated_board.peripherals[7].electrode('A'),
     NUM_DIGITS,
     THETA,
     MARGIN*SMALL_PITCH
 )
 crenellate_electrodes(
-    large_grid.electrodes[(12, 3)],
-    board.peripherals[8].electrode('A'),
+    crenellated_board.grids[0].electrodes[(12, 3)],
+    crenellated_board.peripherals[8].electrode('A'),
     NUM_DIGITS,
     THETA,
     MARGIN*SMALL_PITCH
 )
 
+# Get list of all electrodes with polygons in global board coordinates
 electrodes = reduce_board_to_electrodes(board)
 
-fig, ax = plt.subplots(figsize=(10, 10))
-for e in electrodes:
-    ax.add_patch(patches.Polygon(offset_polygon(e.offset_points(), -0.1), fill=False))
 
-# Add 50x75mm border for reference
-ax.add_patch(patches.Rectangle((0, 0), 75, 50, fill=False, color='green'))
-# Add cover margins
-ax.add_patch(patches.Rectangle((2.5, 4.0), 75-5, 50, fill=False, color='cyan'))
-# Add grids for reference
+fig, ax = plt.subplots(figsize=(10, 10))
+# Add grid outlines for reference
 def draw_grid(ax, grid):
     for col, row in itertools.product(range(grid.size[0]), range(grid.size[1])):
         ax.add_patch(patches.Rectangle(
@@ -205,17 +210,127 @@ def draw_grid(ax, grid):
             fill=False,
             color='yellow')
         )
-draw_grid(ax, large_grid)
-draw_grid(ax, small_grid)
+draw_grid(ax, board.grids[0])
+draw_grid(ax, board.grids[1])
+for e in electrodes:
+    ax.add_patch(patches.Polygon(offset_polygon(e.offset_points(), -0.1), fill=False))
 
+# Add 50x75mm border for reference
+ax.add_patch(patches.Rectangle((0, 0), 75, 50, fill=False, color='green'))
+# Add cover margins that shows the exposed area of the top plate
+ax.add_patch(patches.Rectangle((2.5, 4.0), 75-5, 50, fill=False, color='cyan'))
 ax.autoscale()
 ax.axis('square')
 ax.invert_yaxis()
 plt.show()
 
 # %%
-CLEARANCE = 0.11
-BOARD_ORIGIN = [162.5, 62.25]
+# Write KiCad footprints and layout.yml file for kicad
 projdir = path = os.path.abspath(os.path.dirname(__file__))
-save_board(board, BOARD_ORIGIN, projdir, CLEARANCE)
+save_board(crenellated_board, BOARD_ORIGIN, projdir, CLEARANCE)
+# %%
+# Generate the 'layout' property of a board definition file
+
+# First, get electrode refdes to pin mapping from pcb file, based on net names
+# Then, map the board grids and peripherals to the board definition format. 
+# Finally, encode to JSON using the custom encoder for more readable output.
+
+from dmfwizard.kicad import extract_electrode_nets
+import json
+import re
+
+class CompactJSONEncoder(json.JSONEncoder):
+    """A JSON Encoder that puts small lists on single lines."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.indentation_level = 0
+
+    def encode(self, o):
+        """Encode JSON object *o* with respect to single line lists."""
+
+        if isinstance(o, (list, tuple)):
+            if self._is_single_line_list(o):
+                return "[" + ", ".join(json.dumps(el) for el in o) + "]"
+            else:
+                self.indentation_level += 1
+                output = [self.indent_str + self.encode(el) for el in o]
+                self.indentation_level -= 1
+                return "[\n" + ",\n".join(output) + "\n" + self.indent_str + "]"
+
+        elif isinstance(o, dict):
+            self.indentation_level += 1
+            output = [self.indent_str + f"{json.dumps(k)}: {self.encode(v)}" for k, v in o.items()]
+            self.indentation_level -= 1
+            return "{\n" + ",\n".join(output) + "\n" + self.indent_str + "}"
+
+        else:
+            return json.dumps(o)
+
+    def _is_single_line_list(self, o):
+        if isinstance(o, (list, tuple)):
+            return not any(isinstance(el, (list, tuple, dict)) for el in o)\
+                   and len(o) <= 2\
+                   and len(str(o)) - 2 <= 60
+
+    @property
+    def indent_str(self) -> str:
+        return " " * self.indentation_level
+
+net_table = extract_electrode_nets('PD_ElectrodeBoard_v6.kicad_pcb')
+
+pin_table = {}
+for refdes, net_name in net_table.items():
+    match = re.match('/P(\d+)', net_name)
+    if match is None:
+        print(f"Failed to match pin number from net '{net_name}'")
+    else:
+        pin = int(match.group(1))
+        pin_table[refdes] = pin
+
+layout = {}
+
+# Create empty
+def create_grid_dict(grid: Grid):
+    ret = {}
+    ret['origin'] = grid.origin
+    ret['pitch'] = grid.pitch
+    ret['pins'] = [[None] * grid.width for _ in range(grid.height)]
+    for pos, electrode in grid.electrodes.items():
+        ret['pins'][pos[1]][pos[0]] = pin_table[f'E{electrode.refdes}']
+    return ret
+
+def create_periph_dict(periph: Peripheral):
+    return {
+        'class': periph.peripheral_class,
+        'type': periph.peripheral_type,
+        'id': periph.id,
+        'origin': periph.global_origin(),
+        'rotation': np.rad2deg(periph.rotation),
+        'electrodes': [
+            {
+                'id': e['id'],
+                'pin': pin_table[f"E{e['electrode'].refdes}"],
+                'polygon': e['electrode'].points,
+                'origin': e['electrode'].origin,
+            }
+            for e in periph.electrodes
+        ],
+    }
+
+grid0 = create_grid_dict(board.grids[0])
+grid1 = create_grid_dict(board.grids[1])
+periphs = [create_periph_dict(p) for p in board.peripherals]
+layout = {
+    "layout": {
+        'grids': [grid0, grid1],
+        'peripherals': periphs,
+    }
+}
+
+with open('electrode_board_layout.json', 'w') as f:
+    f.write(json.dumps(layout, cls=CompactJSONEncoder))
+
+
+
 # %%
