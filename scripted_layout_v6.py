@@ -17,7 +17,7 @@ SMALL_PITCH = 2 * BASE_PITCH
 LARGE_PITCH = 3 * BASE_PITCH
 # Define shape of the electrode crenellations
 MARGIN = 0.15
-NUM_DIGITS = 2
+NUM_DIGITS = 5
 THETA = 30
 # Copper-to-copper clearance and origin within the kicad PCB
 CLEARANCE = 0.11
@@ -60,49 +60,49 @@ construct.fill_rect(large_grid, (11, 3), (2, 4))
 small_reservoir_origin = np.add(SMALL_ORIGIN, (0.5 * SMALL_PITCH, 0.0))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/chevron1_reservoir.json'),
+    load_peripheral('peripherals/four_tier_reservoir.json'),
     np.add(small_reservoir_origin, np.multiply((2, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/chevron1_reservoir.json'),
+    load_peripheral('peripherals/four_tier_reservoir.json'),
     np.add(small_reservoir_origin, np.multiply((7, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/chevron1_reservoir.json'),
+    load_peripheral('peripherals/four_tier_reservoir.json'),
     np.add(small_reservoir_origin, np.multiply((12, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/chevron1_reservoir.json'),
+    load_peripheral('peripherals/four_tier_reservoir.json'),
     np.add(small_reservoir_origin, np.multiply((17, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/vortex1_reservoir.json'),
+    load_peripheral('peripherals/vortex2_reservoir.json'),
     np.add(small_reservoir_origin, np.multiply((22, 3), SMALL_PITCH)).tolist(),
     np.deg2rad(0))
 
 # Create active input locations
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/dispense1.json'),
+    load_peripheral('peripherals/dispense2.json'),
     np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((3, 1), LARGE_PITCH)).tolist(),
     np.deg2rad(90))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/dispense1.json'),
+    load_peripheral('peripherals/dispense2.json'),
     np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((3, 3), LARGE_PITCH)).tolist(),
     np.deg2rad(90))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/dispense1.json'),
+    load_peripheral('peripherals/dispense2.json'),
     np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((13, 1), LARGE_PITCH)).tolist(),
     np.deg2rad(270))
 construct.add_peripheral(
     board,
-    load_peripheral('peripherals/dispense1.json'),
+    load_peripheral('peripherals/dispense2.json'),
     np.add(np.add(LARGE_ORIGIN, (0, 0.5*LARGE_PITCH)), np.multiply((13, 3), LARGE_PITCH)).tolist(),
     np.deg2rad(270))
 
@@ -278,6 +278,8 @@ class CompactJSONEncoder(json.JSONEncoder):
         return " " * self.indentation_level
 
 net_table = extract_electrode_nets('PD_ElectrodeBoard_v6.kicad_pcb')
+
+print(net_table)
 
 pin_table = {}
 for refdes, net_name in net_table.items():

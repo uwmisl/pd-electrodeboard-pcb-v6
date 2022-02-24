@@ -13,7 +13,7 @@ from dmfwizard.kicad import write_silkscreen_footprint
 
 
 # List of fiducial codes to create footprints for
-FIDUCIAL_IDS = [9, 10]
+FIDUCIAL_IDS = [11, 12]
 SIZE = 8 # mm
 BORDER = 1 # px
 

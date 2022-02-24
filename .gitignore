@@ -1,5 +1,11 @@
+# Kicad backup files
 *.kicad_pcb-bak
 *.sch-bak
+*-backups
+\#auto_saved_files\#
+# Kicad local project settings
+*.kicad_prl 
+
 *.swp
 _autosave*
 component_layout_plugin.log
